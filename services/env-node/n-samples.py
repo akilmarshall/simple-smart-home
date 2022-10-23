@@ -5,7 +5,11 @@ from requests import get
 from sys import exit
 
 
-parser = ArgumentParser()
+description = '''\
+        A script that samples an env-sensor n times
+        Outputs to stdout.
+'''
+parser = ArgumentParser(description=description)
 parser.add_argument('endpoint', help='address of the env-node. only ip no protocol. 192.168.1.x') 
 parser.add_argument('samples', type=int,  help='number of data samples to take') 
 parser.add_argument('delay', type=int, help='delay in seconds between samples') 
