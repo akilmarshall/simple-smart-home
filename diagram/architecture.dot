@@ -1,0 +1,41 @@
+digraph G {
+	graph [layout=dot rankdir=UD]
+
+	edge_a [label="Edge Device A" shape=component]
+	edge_b [label="Edge Device B" shape=component]
+	edge_c [label="Edge Device C" shape=component]
+
+	systemd [label="Systemd" shape=cylinder]
+	script [label="Script" shape=cylinder]
+	web [label="Web Interface" shape=cylinder]
+
+	service_a [label="Service 1" shape=box]
+	service_b [label="Service 2" shape=box]
+	service_c [label="Service 3" shape=box]
+
+	{ rank=same edge_a edge_b edge_c }
+	{ rank=same systemd script web }
+	{ rank=same service_a service_b service_c }
+
+
+
+	subgraph {
+		label="Service 1"
+		service_a -> edge_a [dir=normal]
+		service_a -> systemd [dir=both]
+	}
+	subgraph {
+		label="Service 2"
+		service_b -> edge_b [dir=normal]
+		service_b -> edge_c [dir=normal]
+		service_b -> script [dir=both]
+	}
+	subgraph {
+		label="Service 3"
+		service_c -> edge_a 
+		service_c -> edge_b
+		service_c -> edge_c
+		service_c -> web [dir=both]
+	}
+
+}
