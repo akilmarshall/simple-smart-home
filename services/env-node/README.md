@@ -2,7 +2,6 @@
 
 Environmental sensing node. 
 
-
 ## back-end
 
 - hardware:
@@ -43,10 +42,13 @@ usage: env-logger.py <ip> <location> [--log path/to/directory]
 
 #### Installation
 
-- create/install a new unit for each env-node
+- create/install a new service/timer pair for each env-node:
+	- several services can use the same unit, (instructions needed)
 - it should have a unique location parameter defined in the unit file
 - the same location should be appended to the unit's name, suppose location = living-room:
-	- env-logger-living-room.unit
+	- env-logger-living-room.service
 	- env-logger.py <ip> living-room
 - /etc/systemd/system/
 - a systemd-timer is used to control sampling frequency
+- if the service or timer is edited you must run:
+	- # systemctl daemon-reload
