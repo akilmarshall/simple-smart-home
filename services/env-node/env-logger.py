@@ -63,7 +63,7 @@ def main():
 
     now = datetime.now()
     if data:= sample(ip):
-        log_file.write(f'{now.year}{now.month}{now.day}.{now.hour}{now.minute:02},{data}\n')
+        log_file.write(f'{now.year}{now.month:02}{now.day:02}.{now.hour:02}{now.minute:02},{data}\n')
 
     log_file.close()
 
