@@ -1,0 +1,6 @@
+[Unit]
+Description=Unit file for env-logger service (simple smart home) 
+
+[Service]
+Type=oneshot
+ExecStart=/home/akil/Project/simple-smart-home/services/env-node/env-logger.py 192.168.1.160 living-room
