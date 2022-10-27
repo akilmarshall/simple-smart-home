@@ -56,5 +56,7 @@ Edge devices hosts:
 
 Frontend hosts:
 
-Can be any modern computer architecture, specifications subject to the requirements of the services to be hosted
+Ideally able to run a linux operating system:
+- SBC (single board computer)
+- can be low power, more ram offers more performance
 - [odroid 8gb](https://www.ebay.com/itm/284762094624?hash=item424d24bc20:g:BggAAOSwbThiVYQs&amdata=enc%3AAQAHAAAAoFrsWC4UKDlvy8McvwkGCw8OHlPJtWY%2BdDBvkkHftCG0VkjF3t6GZMMmzJfUhCtu8As8I1bSMKH1ycog8eRaPke6gJZy5rAgLf5rOBW0Luy4OIArb%2FqjcmiTIPbITeNq2ikKgfLwsPD1926bplJuCehq1SFvmtfE2GDZNDAEugPymHm%2BOr%2FzvFvRLhSYEoRLZwZ4xw697a8qKZZC4ZstEF4%3D%7Ctkp%3ABk9SR9yXtZnlYA)
