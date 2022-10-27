@@ -51,4 +51,8 @@ usage: env-logger.py <ip> <location> [--log path/to/directory]
 - /etc/systemd/system/
 - a systemd-timer is used to control sampling frequency
 - if the service or timer is edited you must run:
+
+
+- systemd timer info:
+	- https://serverfault.com/questions/1057977/systemd-timer-oncalendar-every-minute-ending-with-5
 	- # systemctl daemon-reload
