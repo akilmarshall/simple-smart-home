@@ -14,6 +14,10 @@ It is up to the definition of a specific service to specify these additional non
 
 ![A possible architecture](architecture.png)
 
+<p align="center">
+	<img src=https://imgur.com/2R7d83n.png />
+</p>
+
 ## Edge Device
 
 Edge devices either serve data and/or interact with the real world.
