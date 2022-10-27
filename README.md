@@ -12,6 +12,7 @@ Front end's are the primary means of interacting with edge devices however there
 
 It is up to the definition of a specific service to specify these additional non standard interactions.
 
+%% album of architectures https://imgur.com/a/JgK4Pwy
 <p align="center">
 	<img src=https://imgur.com/EJC8GPN.png />
 </p>
