@@ -13,12 +13,20 @@ digraph G {
 	service_b [label="Service 2" shape=box]
 	service_c [label="Service 3" shape=box]
 
+	frontend [label="Front End" shape=box]
+
+	{ rank=same frontend }
 	{ rank=same edge_a edge_b edge_c }
 	{ rank=same systemd script web }
 	{ rank=same service_a service_b service_c }
 
 
 
+	subgraph {
+		frontend -> service_a [dir=both]
+		frontend -> service_b [dir=both]
+		frontend -> service_c [dir=both]
+	}
 	subgraph {
 		label="Service 1"
 		service_a -> edge_a [dir=normal]
