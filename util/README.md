@@ -20,6 +20,8 @@ Most of the functionality is in the subcommands
 
 #### list
 
+list all (label active/inactive).
+
 ```bash
 $ ssh-manage.py list 
 ```
@@ -55,8 +57,6 @@ $ ssh-manage.py toggle <service-name>
 ```
 
 #### configure 
-
-When run with only a service name enter an interactive mode to configure the services parameters.
 
 ```bash
 $ ssh-manage.py configure <service-name>
