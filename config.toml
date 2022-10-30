@@ -1,0 +1,4 @@
+# default TOML configuration
+log = '/var/simple-smart-home'
+
+[env-sensor]
