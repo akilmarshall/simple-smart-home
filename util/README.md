@@ -30,6 +30,12 @@ $ ssh-manage.py list
 $ ssh-manage.py create
 ```
 
+#### remove
+
+```bash
+$ ssh-manage.py create
+```
+
 #### toggle
 
 ```bash
