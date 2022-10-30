@@ -21,19 +21,19 @@ Most of the functionality is in the subcommands
 #### list
 
 ```bash
-# ssh-manage.py list
+$ ssh-manage.py list
 ```
 
 #### create
 
 ```bash
-# ssh-manage.py create
+$ ssh-manage.py create
 ```
 
 #### toggle
 
 ```bash
-# ssh-manage.py toggle
+$ ssh-manage.py toggle
 ```
 
 #### configure 
