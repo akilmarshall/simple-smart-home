@@ -6,7 +6,7 @@ Manage simple-smart-home services.
     toggle,
     and configure services.
 """
-from unit import Schedule, OnCalendar, EnvLoggerScript, EnvLoggerService 
+from unit import Schedule, TimerOnCalendar, EnvLoggerScript, EnvLoggerService 
 
 
 def main():
