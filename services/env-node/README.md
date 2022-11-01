@@ -55,4 +55,5 @@ usage: env-logger.py <ip> <location> [--log path/to/directory]
 
 - systemd timer info:
 	- https://serverfault.com/questions/1057977/systemd-timer-oncalendar-every-minute-ending-with-5
+	- https://linuxconfig.org/how-to-schedule-tasks-with-systemd-timers-in-linux
 	- # systemctl daemon-reload
