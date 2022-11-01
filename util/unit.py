@@ -1,8 +1,9 @@
 """
 Module for creating systemd units (service and timer pairs) using templates (jinja2)
 """
-from jinja2 import Template
 from pathlib import Path
+
+from jinja2 import Template
 
 
 TEMPLATE_PATH = Path('templates')
@@ -87,11 +88,10 @@ class Schedule:
         """Render the schedule string. """
         return f'{self.week_day}{self.year}-{self.month}-{self.day} {self.hour}:{self.minute}:{self.second}'
             
+
 class TimerOnCalendar:
     """
-    A realtime (OnCalendar) timer
-    Class represents a realtime (OnCalendar) timer.
-
+    Render an OnCalendar (realtime) timer 
     """
     template = TEMPLATE_PATH / 'oncalender.timer'
 
@@ -119,19 +119,6 @@ class TimerOnCalendar:
         template = Template(template_str)
         return template.render(description=self.description, schedule=self.schedule, persistence=self.persistent)
 
-def env_service(ip:str, location:str, log:str):
-    """
-    :script:
-    :ip:
-    :location:
-    :log:
-    """
-    env_script = Path('.').absolute().parent / 'services' / 'env-node' / 'env-logger.py'
-    env_service_template = TEMPLATE_PATH / 'env.service'
-    template_str = open(env_service_template.absolute(), 'r').read()
-    template = Template(template_str)
-    description = f'Service file for the env-logger service. device located at {location} [simple smart home]'
-    return template.render(description=description, script=env_script, ip=ip, location=location, log=log)
 
 class EnvLoggerScript:
     """
@@ -147,3 +134,19 @@ class EnvLoggerScript:
 
     def __str__(self):
         return f'{EnvLoggerScript.script} {self.ip} {self.location} --log {self.log}'
+
+
+class EnvLoggerService:
+    """
+    Render a Env Logger Service file
+    """
+    template = TEMPLATE_PATH / 'env.service'
+
+    def __init__(self, description:str, script:EnvLoggerScript):
+        self.description = description
+        self.script = script
+
+    def __str__(self):
+        template_str = open(EnvLoggerService.template.absolute(), 'r').read()
+        template = Template(template_str)
+        return template.render(description=self.description, script=self.script)
