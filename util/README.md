@@ -66,3 +66,9 @@ $ ssh-manage.py configure <service-name>
 
 Looks for configuration in the following directory by default
 - /etc/simple-smart-home
+
+
+## systemd dbus python api
+
+- https://pi3g.com/2020/08/01/enabling-and-disabling-a-systemd-service-in-python-using-dbus/
+- https://trstringer.com/python-systemd-dbus/
