@@ -11,9 +11,6 @@ from sys import exit
 from pathlib import Path
 
 
-LOG_DIR = Path('/') / 'var' / 'env-log'
-LOG_DIR = '/var/env-log'
-
 def headers(ip):
     """
     sample an env sensor at http://<ip>/headers, 
@@ -42,7 +39,7 @@ def main():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('ip', help='address of the env-node, i.e. 192.168.1.x') 
     parser.add_argument('location', help='location the env-senor is in. i.e. living-room.') 
-    parser.add_argument('--log', default=LOG_DIR, help=f'root location of the log directory. default:{LOG_DIR}') 
+    parser.add_argument('--log', required=True, help=f'root location of the log directory') 
 
     args = parser.parse_args()
     log_path = Path(args.log)
