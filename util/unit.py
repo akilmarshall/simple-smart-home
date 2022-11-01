@@ -1,11 +1,12 @@
 """
-Module for creating systemd units (services and timers) using templates (jinja2)
+Module for creating systemd units (service and timer pairs) using templates (jinja2)
 """
 from jinja2 import Template
 from pathlib import Path
 
 
 TEMPLATE_PATH = Path('templates')
+LOG_PATH = Path('/') / 'var' / 'simple-smart-home'
 
 class Schedule:
     """
@@ -94,7 +95,7 @@ class TimerOnCalendar:
     """
     template = TEMPLATE_PATH / 'oncalender.timer'
 
-    def __init__(self, description:str, schedule:Schedule, persistent:str='false'):
+    def __init__(self, description:str, schedule:Schedule, persistent:bool=False):
         """
         :description:   description field of the timer file
         :schedule:      Schedule object
@@ -103,10 +104,13 @@ class TimerOnCalendar:
 
         self.description = description
         self.schedule = schedule
-        self.persistent = persistent
+        self.persistent = 'true' if persistent else 'false'
 
     def set_description(self, description):
         self.description = description 
+
+    def set_persistent(self, persistent:bool):
+        self.persistent = 'true' if persistent else 'false'
 
     def __str__(self):
         """Render the timer string using the template and data members. """
@@ -114,7 +118,6 @@ class TimerOnCalendar:
         template_str = open(TimerOnCalendar.template.absolute(), 'r').read()
         template = Template(template_str)
         return template.render(description=self.description, schedule=self.schedule, persistence=self.persistent)
-
 
 def env_service(ip:str, location:str, log:str):
     """
@@ -129,3 +132,18 @@ def env_service(ip:str, location:str, log:str):
     template = Template(template_str)
     description = f'Service file for the env-logger service. device located at {location} [simple smart home]'
     return template.render(description=description, script=env_script, ip=ip, location=location, log=log)
+
+class EnvLoggerScript:
+    """
+    Class representing the env-logger script and a set of parameters.
+    Renders to a valid bash one liner: path/to/script/ valid parameter pack
+    To be used in the EnvLoggerUnit to render an entire service file
+    """
+    script = Path('.').absolute().parent / 'services' / 'env-node' / 'env-logger.py'
+    def __init__(self, ip, location, log=LOG_PATH / 'env'):
+        self.ip = ip
+        self.location = location
+        self.log = log
+
+    def __str__(self):
+        return f'{EnvLoggerScript.script} {self.ip} {self.location} --log {self.log}'
