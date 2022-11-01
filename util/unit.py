@@ -1,5 +1,7 @@
 """
 Module for creating systemd units (service and timer pairs) using templates (jinja2)
+Timers (only realtime currently) and Services (correlate to Edge Device services) are represented with classes that implement __str__ to render valid systemd timer and services files.
+Both are built up using primitive data members or classes when appropriate.
 """
 from pathlib import Path
 
