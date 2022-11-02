@@ -6,12 +6,27 @@ Manage simple-smart-home services.
     toggle,
     and configure services.
 """
-from unit import Schedule, TimerOnCalendar, EnvLoggerScript, EnvLoggerService 
+from pathlib import Path
 
+from manage_unit import enable
+from unit import EnvLoggerScript, EnvLoggerService, Schedule, TimerOnCalendar
+
+UNIT_PATH = Path('/') / 'etc' / 'systemd' / 'system'
+
+def make_env_unit(schedule:Schedule, ip:str, location:str, log:Path):
+    timer = TimerOnCalendar(f'timer for env-logger at {location}', schedule) 
+    script = EnvLoggerScript(ip, location, log)
+    service = EnvLoggerService(f'service file for env-logger at {location}', script) 
+    timer_file_name = f'env-logger-{location}.timer'
+    service_file_name = f'env-logger-{location}.service'
+    with open(UNIT_PATH / timer_file_name, 'w') as f:
+        f.write(str(timer))
+    with open(UNIT_PATH / service_file_name, 'w') as f:
+        f.write(str(service))
+    enable(timer_file_name)
 
 def main():
     from argparse import ArgumentParser
-    from pathlib import Path
 
     config_path = Path('/') / 'etc' / 'simple-smart-home'
 
