@@ -25,8 +25,8 @@ class Schedule:
             month:list|str|int|None=None,
             day:list|str|int|None=None,
             hour:list|str|int|None=None,
-            minute:list|str|int|None=None,
-            second:list|str|int|None=None,
+            minute:list|str|int|None=0,
+            second:list|str|int|None=0,
             ):
         """
         None becomes * (activates indescriminately)
