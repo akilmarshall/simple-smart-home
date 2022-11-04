@@ -6,12 +6,30 @@ Manage simple-smart-home services.
     toggle,
     and configure services.
 """
+from argparse import ArgumentParser
 from pathlib import Path
 
-from manage_unit import enable
+from manage_unit import enable, status
 from unit import EnvLoggerScript, EnvLoggerService, Schedule, TimerOnCalendar
 
 UNIT_PATH = Path('/') / 'etc' / 'systemd' / 'system'
+# roster file for services (contains a list of services [active and inactive])
+# the systemd units that have been created and must be managed
+SERVICE_FILE = Path('/') / 'etc' / 'simple-smart-home.services'  
+
+def load_services() -> list[str] | None:
+    if SERVICE_FILE.exists():
+        services = []
+        with open(SERVICE_FILE, 'r') as f:
+            for line in f.readlines():
+                services.append(line.strip())
+        return services
+
+def write_services(services):
+    with open(SERVICE_FILE, 'w') as f:
+        for service in services:
+            f.write(f'{service}\n')
+
 
 def make_env_unit(schedule:Schedule, ip:str, location:str, log:Path):
     timer = TimerOnCalendar(f'timer for env-logger at {location}', schedule) 
@@ -25,8 +43,14 @@ def make_env_unit(schedule:Schedule, ip:str, location:str, log:Path):
         f.write(str(service))
     enable(timer_file_name)
 
+def make_env_parser(parser: ArgumentParser):
+    parser.add_argument('ip', help='ip address of the edge device to monitor.')
+    parser.add_argument('location', help='brief one word (no white space) description of the physical location of the env Edge Device.')
+    parser.add_argument('log', type=Path, help='absolute path to the directory to write date files')
+    parser.add_argument('n', type=int, help='minute interval to take measurements')
+    return parser
+
 def main():
-    from argparse import ArgumentParser
 
     config_path = Path('/') / 'etc' / 'simple-smart-home'
 
@@ -34,25 +58,56 @@ def main():
     parser.add_argument('--config', default=config_path, help=f'Path to configuration, specified as a path. default:{config_path}')
     subparsers = parser.add_subparsers(dest='sub', help='sub-command help')
     list_parser = subparsers.add_parser('list', help='list all services (active and inactive)')
-    create_parser = subparsers.add_parser('create',  help='create service (make a systemd unit and add to service file')
+    # create_parser = subparsers.add_parser('create', help='create service (make a systemd unit and add to service file')
+    create_env_parser = make_env_parser(subparsers.add_parser('create-env', help='create env-logger service, parameterize by (ip, location, log-path, n'))
     remove_parser = subparsers.add_parser('remove', help='remove service, delete from configuration, and delete from service file')
+    remove_parser.add_argument('service', help='name of service to remove')
     toggle_parser = subparsers.add_parser('toggle', help='toggle service (set enabled, set disabled, toggle)')
     config_parser = subparsers.add_parser('configure', help='configure (update the services configuration)')
 
     args = parser.parse_args()
+    services = load_services()  # load in service population from SERVICE_FILE 
     match args.sub:
         case 'list':
-            pass
-        case 'create':
-            pass
+            if services:
+                for service in services:
+                    print(f'{service}')
+            else:
+                print('no installed services')
+        case 'create-env':
+            ip = args.ip
+            location = args.location
+            log = args.log
+            n = args.n
+
+            schedule = Schedule(minute=f'0/{n}')
+            # make_env_unit(schedule, ip, location, log)
+            service = f'env-logger-{location}'
+            # append to services population
+            if services:
+                services.append(service)  
+            else:
+                services = [service]
+            print(f'created: {service}')
         case 'remove':
-            pass
+            service = args.service
+            if services and service in services:
+                services.remove(service)  # remove from services population
+                print(f'removed: {service}')
+            else:
+                print(f'I cant find a service called: {service}')
+                print(services)
+
         case 'toggle':
             pass
         case 'configure':
             pass
         case None:
             pass
+    if services:
+        write_services(services)
+    else:
+        write_services([])
 
 if __name__ == '__main__':
     main()

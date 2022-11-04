@@ -42,34 +42,41 @@ class Schedule:
         :seceond:       second of the minute to activate on (0-59)
         """
 
-        self.week_day = self.parse_week_day(week_day)
-        self.year = self.parse(year)
-        self.month = self.parse(month)
-        self.day = self.parse(day)
-        self.hour = self.parse(hour)
-        self.minute = self.parse(minute)
-        self.second = self.parse(second)
+        self._week_day = week_day
+        self._year = year
+        self._month = month
+        self._day = day
+        self._hour = hour
+        self._minute = minute
+        self._second = second
 
-    def set_week_day(self, week_day):
-        self.week_day = self.parse_week_day(week_day)
+    @property
+    def week_day(self):
+        return self.parse_week_day(self._week_day)
 
-    def set_year(self, year):
-        self.year = self.parse(year)
+    @property
+    def year(self):
+        return self.parse(self._year)
 
-    def set_month(self, month):
-        self.month = self.parse(month)
+    @property
+    def month(self):
+        return self.parse(self._month)
 
-    def set_day(self, day):
-        self.day = self.parse(day)
+    @property
+    def day(self):
+        return self.parse(self._day)
 
-    def set_hour(self, hour):
-        self.hour = self.parse(hour)
+    @property
+    def hour(self):
+        return self.parse(self._hour)
 
-    def set_minute(self, minute):
-        self.minute = self.parse(minute)
+    @property
+    def minute(self):
+        return self.parse(self._minute)
 
-    def set_second(self, second):
-        self.second = self.parse(second)
+    @property
+    def second(self):
+        return self.parse(self._second)
 
     def parse(self, x):
         if isinstance(x, list):
@@ -86,10 +93,17 @@ class Schedule:
         elif x is None:
             return ''
 
+    def __repr__(self):
+        return f'Schedule({self._week_day = }, {self._year = }, {self._month = }, {self._day = }, {self._hour = }, {self._minute = }, {self._second = }'
+            
     def __str__(self):
         """Render the schedule string. """
         return f'{self.week_day}{self.year}-{self.month}-{self.day} {self.hour}:{self.minute}:{self.second}'
-            
+
+
+def minutely(n:int, start:int=0):
+    """Define a schedule that schedules at a specified minute interval, optionally specify the initial minute. """
+    return Schedule(minute=f'{start}/{n}')
 
 class TimerOnCalendar:
     """
