@@ -26,22 +26,10 @@ list all (label active/inactive).
 $ ssh-manage.py list 
 ```
 
-list only active
-
-```bash
-$ ssh-manage.py list active
-```
-
-list only inactive
-
-```bash
-$ ssh-manage.py list inactive
-```
-
 #### create
 
 ```bash
-$ ssh-manage.py create <service-name>
+$ ssh-manage.py create-env <ip> <location> <log directory> <minute interval>
 ```
 
 #### remove
@@ -56,16 +44,17 @@ $ ssh-manage.py remove <service-name>
 $ ssh-manage.py toggle <service-name>
 ```
 
-#### configure 
+<!-- ### configure -->
 
-```bash
-$ ssh-manage.py configure <service-name>
-```
 
-## Configuration
-
-Looks for configuration in the following directory by default
-- /etc/simple-smart-home
+<!-- ```bash -->
+<!-- $ ssh-manage.py configure <service-name> -->
+<!-- ``` -->
+<!--  -->
+<!-- ## Configuration -->
+<!--  -->
+<!-- Looks for configuration in the following directory by default -->
+<!-- - /etc/simple-smart-home -->
 
 
 ## systemd dbus python api
