@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Manage simple-smart-home services.
     list,
@@ -7,9 +8,10 @@ Manage simple-smart-home services.
     and configure services.
 """
 from argparse import ArgumentParser
+import os
 from pathlib import Path
 
-from manage_unit import enable, status
+from manage_unit import enable, status, disable
 from unit import EnvLoggerScript, EnvLoggerService, Schedule, TimerOnCalendar
 
 UNIT_PATH = Path('/') / 'etc' / 'systemd' / 'system'
@@ -43,6 +45,14 @@ def make_env_unit(schedule:Schedule, ip:str, location:str, log:Path):
         f.write(str(service))
     enable(timer_file_name)
 
+def remove_unit(unit:str, service=True, timer=True):
+    if service:
+        os.remove(UNIT_PATH / f'{unit}.service')
+    if timer:
+        os.remove(UNIT_PATH / f'{unit}.timer')
+
+
+
 def make_env_parser(parser: ArgumentParser):
     parser.add_argument('ip', help='ip address of the edge device to monitor.')
     parser.add_argument('location', help='brief one word (no white space) description of the physical location of the env Edge Device.')
@@ -59,10 +69,11 @@ def main():
     subparsers = parser.add_subparsers(dest='sub', help='sub-command help')
     list_parser = subparsers.add_parser('list', help='list all services (active and inactive)')
     # create_parser = subparsers.add_parser('create', help='create service (make a systemd unit and add to service file')
-    create_env_parser = make_env_parser(subparsers.add_parser('create-env', help='create env-logger service, parameterize by (ip, location, log-path, n'))
+    make_env_parser(subparsers.add_parser('create-env', help='create env-logger service, parameterized by (ip, location, log-path, n)'))
     remove_parser = subparsers.add_parser('remove', help='remove service, delete from configuration, and delete from service file')
     remove_parser.add_argument('service', help='name of service to remove')
     toggle_parser = subparsers.add_parser('toggle', help='toggle service (set enabled, set disabled, toggle)')
+    toggle_parser.add_argument('service', help='name of service to toggle')
     config_parser = subparsers.add_parser('configure', help='configure (update the services configuration)')
 
     args = parser.parse_args()
@@ -71,7 +82,8 @@ def main():
         case 'list':
             if services:
                 for service in services:
-                    print(f'{service}')
+                    print(f'{service}', end='\t')
+                    print(status(f'{service}.timer'))
             else:
                 print('no installed services')
         case 'create-env':
@@ -81,7 +93,7 @@ def main():
             n = args.n
 
             schedule = Schedule(minute=f'0/{n}')
-            # make_env_unit(schedule, ip, location, log)
+            make_env_unit(schedule, ip, location, log)
             service = f'env-logger-{location}'
             # append to services population
             if services:
@@ -93,13 +105,25 @@ def main():
             service = args.service
             if services and service in services:
                 services.remove(service)  # remove from services population
+                remove_unit(service)
                 print(f'removed: {service}')
             else:
                 print(f'I cant find a service called: {service}')
                 print(services)
 
         case 'toggle':
-            pass
+            service = args.service
+            if services and service in services:
+                match status(f'{service}.timer'):
+                    case 'enabled':
+                        disable(f'{service}.timer')
+                        print(f'disabled {service}')
+                    case 'disabled':
+                        enable(f'{service}.timer')
+                        print(f'enabled {service}')
+            else:
+                print(f'I cant find a service called: {service}')
+                print(services)
         case 'configure':
             pass
         case None:
