@@ -1,8 +1,0 @@
-[Unit]
-Description=Timer for env-logger.unit
-
-[Timer]
-OnCalendar=*:0/5
-
-[Install]
-WantedBy=timers.target
