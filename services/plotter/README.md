@@ -2,6 +2,13 @@
 
 This service plots data files created by services like the env-node service.
 
+
+<p align="center">
+	<img src=https://imgur.com/Cf8ue4Y.png />
+</p>
+<p align = "center">Example plot of the last week of data from the env-node in the living room</p>
+
+
 ## parameters
 
 mandatory:
