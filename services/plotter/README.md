@@ -20,7 +20,9 @@ mandatory:
 	- path to directory/file name to write out
 	- if directory use default name
 	- if path write out directly
+
 optional:
+
 - last _filter_
 	- where filter is a string describing a period of time
 	- H -> hour
